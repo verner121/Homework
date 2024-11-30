@@ -17,8 +17,8 @@ def mask_account_card(user_input: Union[str]) -> None | str:
         return print("Вы ввели неккоректные данные")
 
 
-def get_date(user_date: Union[str]) -> None | str:
+def get_date(user_date: Union[str]) -> str:
     """Функция, принимающая дату"""
     new_date = user_date.split("T")
     date = new_date[0].split("-")
-    return print(f"{date[-1]}.{date[-2]}.{date[-3]}")
+    return f"{date[-1]}.{date[-2]}.{date[-3]}"
