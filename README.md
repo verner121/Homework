@@ -12,6 +12,11 @@ git clone git@github.com:verner121/Homework.git
 3.Установите зависимости:
 ```
 pip install -r requirements.txt
+flake8 = "^7.1.1"
+black = "^24.10.0"
+isort = "^5.13.2"
+mypy = "^1.13.0"
+python = "^3.13"
 ```
 ## Тестирование
 1. в папке `tests` проводятся тестирования функций с различными сценариями и подставлением данных
