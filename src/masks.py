@@ -13,7 +13,7 @@ def get_masck_card_number(new_input: Union[int, str]) -> None | str:
         else:
             return print("Вы ввели недостаточно цифр")
     else:
-         return print("Вы ввели не число")
+        return print("Вы ввели не число")
 
 
 def get_mask_account(new_input: Union[int, str]) -> None | str:
@@ -23,6 +23,6 @@ def get_mask_account(new_input: Union[int, str]) -> None | str:
         if len(str_account) == CONST_ACCOUNT_NUMB:
             return f"**{str_account[-4:]}"
         else:
-           return  print("Вы ввели недостаточно цифр")
+            return print("Вы ввели недостаточно цифр")
     else:
-       return  print("Введите номер лицевого счета")
+        return print("Введите номер лицевого счета")
