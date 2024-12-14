@@ -25,6 +25,12 @@ def mask_account_card(user_input: Union[str]) -> str:
 
 def get_date(user_date: Union[str]) -> str:
     """Функция, принимающая дату"""
-    new_date = user_date.split("T")
-    date = new_date[0].split("-")
-    return f"{date[-1]}.{date[-2]}.{date[-3]}"
+    if user_date != "":
+      if "T" in user_date:
+        new_date = user_date.split("T")
+        date = new_date[0].split("-")
+        return f"{date[-1]}.{date[-2]}.{date[-3]}"
+      else:
+          return "Введите корректные данные"
+    else:
+        return "Введите корректные данные"
