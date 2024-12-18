@@ -15,7 +15,6 @@ def get_masck_card_number(new_input: Union[int, str]) -> str:
     else:
         return "Вы ввели не число"
 
-
 def get_mask_account(new_input: Union[int, str]) -> str:
     """Функция принимающая счет карты и на выходе - маску счета"""
     str_account = str(new_input)
@@ -26,3 +25,4 @@ def get_mask_account(new_input: Union[int, str]) -> str:
             return "Вы ввели недостаточно цифр"
     else:
         return "Введите номер лицевого счета"
+      
