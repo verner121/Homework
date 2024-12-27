@@ -30,7 +30,7 @@ def log(filename=None):
 
 
 def printing(func):
-    """Фиксирует начало и конец работы функции """
+    """Фиксирует начало и конец работы функции"""
 
     def wrapper(*args, **kwargs):
         print(f"Function {func} started")
@@ -48,6 +48,7 @@ def timer(func):
         time_1 = time()
         result = func(*args, **kwargs)
         time_2 = time()
+        print(f"Time for work: {time_2 - time_1}")
         return result
 
     return wrapper
