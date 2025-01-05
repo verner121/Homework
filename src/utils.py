@@ -1,21 +1,42 @@
 import json
+import logging
 import os
 
-path_to_file = os.path.join(os.path.dirname(__file__), "data", "..", "operations.json")
+# Создание папки logs, если она не существует
+if not os.path.exists("logs"):
+    os.makedirs("logs")
+
+# Настройка логирования
+logger = logging.getLogger("utils")
+logger.setLevel(logging.DEBUG)  # Уровень логирования не ниже DEBUG
+
+# Создание обработчика для записи логов в файл
+file_handler = logging.FileHandler("logs/utils.log", mode="w")
+file_handler.setLevel(logging.DEBUG)
+
+# Создание и установка форматера
+file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(file_formatter)
+
+# Добавление обработчика к логгеру
+logger.addHandler(file_handler)
 
 
-def list_dict_transaction(path_to_file):
-    try:
-        with open(path_to_file, "r", encoding='utf-8') as f:
-            try:
-                operation_file = json.load(f)
-            except json.JSONDecodeError as e:
-                print(f"Ошибка при декодировании JSON из файла {path_to_file}: {e}")
-                return []
-        if type(operation_file) == list:
-            return operation_file
-        else:
-            return []
-    except FileNotFoundError as e:
-        print('Файл не найден')
-        return []
+def load_transactions(file_path):
+    """Загрузить транзакции из JSON-файла."""
+    if not os.path.isfile(file_path):
+        logger.error(f"Файл не найден: {file_path}")
+        return []  # Если файл не существует, вернуть пустой список
+
+    with open(file_path, "r", encoding="utf-8") as file:
+        try:
+            data = json.load(file)  # Попытка загрузить данные из файла
+            if isinstance(data, list):  # Проверка, является ли загруженные данные списком
+                logger.info(f"Транзакции успешно загружены из файла: {file_path}")
+                return data
+            else:
+                logger.warning(f"Данные в файле {file_path} не являются списком.")
+                return []  # Если данные не список, вернуть пустой список
+        except json.JSONDecodeError as e:
+            logger.error(f"Ошибка при декодировании JSON из файла {file_path}: {e}")
+            return []  # Если ошибка при декодировании JSON, вернуть пустой список
