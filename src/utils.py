@@ -11,7 +11,7 @@ logger = logging.getLogger("utils")
 logger.setLevel(logging.DEBUG)  # Уровень логирования не ниже DEBUG
 
 # Создание обработчика для записи логов в файл
-file_handler = logging.FileHandler("logs/utils.log", mode="w")
+file_handler = logging.FileHandler("logs/utils.log", mode="w", encoding='utf-8')
 file_handler.setLevel(logging.DEBUG)
 
 # Создание и установка форматера
