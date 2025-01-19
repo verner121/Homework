@@ -12,10 +12,11 @@ def read_transactions_from_csv(file_path):
         return transactions
 
     except Exception as e:
+        f"Ошибка при чтении файла {file_path}: {e}"
         raise
 
 
-def read_transactions_from_excel(file_path) :
+def read_transactions_from_excel(file_path):
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Файл {file_path} не найден.")
     try:
@@ -23,5 +24,5 @@ def read_transactions_from_excel(file_path) :
         transactions = df.to_dict(orient="records")
         return transactions
     except Exception as e:
+        f"Ошибка при чтении файла {file_path}: {e}"
         raise
-
