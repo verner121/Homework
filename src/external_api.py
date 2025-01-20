@@ -2,12 +2,19 @@ import os
 import requests
 from dotenv import load_dotenv
 
-load_dotenv('.env')  # Загружаем переменные окружения из .env файла
+load_dotenv()  # Загружаем переменные окружения из .env файла
 
 
-def convert_to_rub(transaction):
-    """Конвертирует сумму транзакции в рубли."""
+def convert_to_rub(transaction: dict) -> float:
+    """Конвертирует сумму транзакции в рубли.
 
+    Args:
+        transaction (dict): Словарь с данными о транзакции, содержащий
+                            'amount' и 'currency'.
+
+    Returns:
+        float: Сумма транзакции в рублях.
+    """
     amount = transaction['amount']  # Получаем сумму транзакции
     currency = transaction['currency']  # Получаем валюту транзакции
 
