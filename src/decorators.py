@@ -1,61 +1,62 @@
-from datetime import time
-from functools import wraps
+import logging
+import os
+from datetime import datetime
+
+
+# Настройка логирования
+def setup_logger(filename=None):
+    logger = logging.getLogger("my_logger")
+    logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(asctime)s - %(message)s")
+
+    if filename is not None:
+        log_file = os.path.join("logs", filename)
+        os.makedirs(os.path.dirname(log_file), exist_ok=True)  # Создание папки, если не существует
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+    else:
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+
+    return logger
 
 
 def log(filename=None):
-    """Декоратор для логирования функции, аргументов, результатов и ошибок"""
+    """
+        Декоратор для логирования вызовов функции.
 
-    def my_decorator(func):
-        @wraps(func)
+        Этот декоратор записывает информацию о вызовах обернутой функции, включая
+        переданные аргументы и возвращаемое значение, в указанный файл или выводит
+        в консоль. В случае возникновения исключения декоратор также записывает
+        информацию об ошибке.
+
+        Параметры:
+        - filename (str): Имя файла, в который будет записываться лог. Если не указано,
+          лог выводится в консоль.
+
+        Возвращает:
+        - decorator (function): Функцию-декоратор, которая оборачивает
+          целевую функцию.
+        """
+    logger = setup_logger(filename)
+
+    def decorator(func):
         def wrapper(*args, **kwargs):
+            function_name = func.__name__
+            start_time = datetime.now()
+            logger.info(f"{function_name} called at {start_time.isoformat()} with args: {args} and kwargs: {kwargs}")
+
             try:
                 result = func(*args, **kwargs)
-                if filename:
-                    with open(filename, "a", encoding="utf-8") as file:
-                        file.write(f"{func.__name__} ok\n")
-                else:
-                    print(f"{func.__name__} ok")
+                logger.info(f"{function_name} result: {result}")
                 return result
-
-            except Exception as error:
-                if filename:
-                    with open(filename, "a", encoding="utf-8") as file:
-                        file.write(f"{func.__name__} error: {error.__class__.__name__}.Inputs: {args}, {kwargs}\n")
-                else:
-                    print(f"{func.__name__} error: {error.__class__.__name__}. Inputs: {args}, {kwargs}")
+            except Exception as e:
+                error_message = f"{function_name} error: {type(e).__name__}. Inputs: {args}, {kwargs}"
+                logger.error(error_message)
+                raise
 
         return wrapper
 
-    return my_decorator
-
-
-def printing(func):
-    """Фиксирует начало и конец работы функции"""
-
-    def wrapper(*args, **kwargs):
-        print(f"Function {func} started")
-        result = func(*args, **kwargs)
-        print(f"Function {func} finished")
-        return result
-
-    return wrapper
-
-
-def timer(func):
-    """Фиксирует время, которое затратит функция на выполнение"""
-
-    def wrapper(*args, **kwargs):
-        time_1 = time()
-        result = func(*args, **kwargs)
-        time_2 = time()
-        print(f"Time for work: {time_2 - time_1}")
-        return result
-
-    return wrapper
-
-
-@printing
-@timer
-def my_function():
-    for i in range(100000000):
-        continue
+    return decorator
